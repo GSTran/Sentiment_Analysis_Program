@@ -1,19 +1,21 @@
-from textblob import TextBlob
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 def analyze_sentiment(text):
-    analysis = TextBlob(text)
-    polarity = analysis.sentiment.polarity
-
-    if polarity > 0:
-        return "Positive"
-    elif polarity < 0:
-        return "Negative"
+    sia = SentimentIntensityAnalyzer()
+    sentiment_scores = sia.polarity_scores(text)
+    
+    if sentiment_scores['compound'] >= 0.05:
+        return 'Positive'
+    elif sentiment_scores['compound'] <= -0.05:
+        return 'Negative'
     else:
-        return "Neutral"
+        return 'Neutral'
 
-# Input text from the user
-input_text = input("Enter the text: ")
+def main():
+    input_text = input("Enter a sentence: ")
+    sentiment = analyze_sentiment(input_text)
+    
+    print("Sentiment:", sentiment)
 
-# Analyze sentiment
-sentiment = analyze_sentiment(input_text)
-print("Sentiment:", sentiment)
+if __name__ == "__main__":
+    main()
